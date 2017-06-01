@@ -55,14 +55,14 @@ var SKUDATA = null;
 			        items.push(data[i]);
 			    }
 			    _this.find(params.spec).each(function (index) {
-			        index = parseInt($(this).find(params.itemClass).attr("st"));
+			        index = parseInt($(this).find(params.itemClass).data("st"));
 			        var temp = ["\\d+", "\\d+", "\\d+", "\\d+"];
 			        for (var i = 0; i < skuLen; i++) {
 			            if (i == index) continue;
 			            if (skuId[i] > 0) temp[i+1] = skuId[i];
 			        }
 			        $(this).find(params.itemClass).each(function () {
-			            temp[index + 1] = $(this).attr('cid');
+			            temp[index + 1] = $(this).data('cid');
 			            var reg = new RegExp(temp.join("_"));
 			            if (
 			            	!items.any(function (i) {
@@ -113,18 +113,18 @@ var SKUDATA = null;
 				_this.on('click', '.enabled', function () {
 				    if ($(this).hasClass('selected')) {
 				        $(this).removeClass('selected');
-				        skuId[parseInt($(this).attr('st'))] = 0;
+				        skuId[parseInt($(this).data('st'))] = 0;
 				    }
 				    else {
 				        $(this).addClass('selected').siblings().removeClass('selected');
-				        skuId[parseInt($(this).attr('st'))] = $(this).attr('cid');
+				        skuId[parseInt($(this).data('st'))] = $(this).data('cid');
 				    }
 				    checkTodo(skuArr, skuId);
 
 					var len = $('.selected',_this).length;
 					if (len == skuLen) {
 					    for (var i = 0; i < len; i++) {
-					        skuId[parseInt($('.selected', _this).eq(i).attr('st'))] = $('.selected', _this).eq(i).attr('cid');
+					        skuId[parseInt($('.selected', _this).eq(i).data('st'))] = $('.selected', _this).eq(i).data('cid');
 						}
 						var select = skuArr[params.productId + '_' + skuId.join('_')];
 						params.callBack(select,_this);  //回调方法，返回当前选中sku、 当前对象
