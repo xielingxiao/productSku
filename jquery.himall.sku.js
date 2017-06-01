@@ -37,6 +37,15 @@ var SKUDATA = null;
 			}
 		}
 		
+		Array.prototype.any = function (fn) {
+			var me = this;
+			for (var i = 0; i < me.length; i++) {
+				if (fn(me[i], i) == true)
+					return true;
+			}
+			return false;
+		};
+		
 		var _this=$(this),
 			skuLen = $(params.spec,_this).length,
 			skuId = [0, 0, 0],
@@ -55,15 +64,17 @@ var SKUDATA = null;
 			        $(this).find(params.itemClass).each(function () {
 			            temp[index + 1] = $(this).attr('cid');
 			            var reg = new RegExp(temp.join("_"));
-			            if (!items.any(function (i) {
-                            var result =reg.test(i.SkuId);//判断规格合法性
-                            if (result) 
-                                    result = i.Stock > 0 || i.BaseStock > 0;//判断是否含有库存
-                            return result;
-			            })) {
+			            if (
+			            	!items.any(function (i) {
+								var result =reg.test(i.SkuId);//判断规格合法性
+	                            if (result) {
+	                                result = i.Stock > 0 || i.BaseStock > 0;//判断是否含有库存
+	                            }
+	                            return result;
+				            })
+			            ){
 			                $(this).removeClass('enabled').addClass('disabled');
-			            }
-			            else {
+			            }else{
 			                $(this).removeClass('disabled').addClass('enabled');
 			            }
 			        });
